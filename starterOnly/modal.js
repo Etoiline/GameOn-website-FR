@@ -17,6 +17,9 @@ const modalName = document.getElementById("first");
 const modalLastName = document.getElementById("last");
 const modalMail = document.getElementById("email");
 const modalBirthdate = document.getElementById("birthdate");
+const modalTournoi = document.getElementById("quantity");
+const modalCity = document.getElementsByName("location");
+const modalTerms = document.getElementById("checkbox1");
 
 
 // launch modal event
@@ -31,48 +34,62 @@ function launchModal() {
 // quitter le formulaire
 modalClose.addEventListener("click", quitModal); 
 function quitModal() {
-  console.log("fonction quitter");
+  //console.log("fonction quitter");
   modalbg.style.display = "none";
 }
 
 
+const regName = /^[a-zéè]+(?:[\s-]?[a-zéè])+$/i;
+
 //contrôler le champ prénom
-modalName.addEventListener("keyup", checkPrenom); 
+modalName.addEventListener("input", checkPrenom); 
 const modalNameDiv = document.getElementsByClassName("formData")[0]; 
 var checkPrenomResult = false;
 function checkPrenom (event) {
-  console.log("value", modalName.value, modalName.value.length);
-  if (modalName.value.length<2){
+  if ((regName.test(modalName.value))==false){
     modalNameDiv.setAttribute("data-error-visible", "true");
-    modalNameDiv.setAttribute("data-error", "2 caractères minimum");
     checkPrenomResult = false;
+    if (modalName.value.length<2){
+      modalNameDiv.setAttribute("data-error", "2 caractères minimum");
+    }
+    else {
+      modalNameDiv.setAttribute("data-error", "prénom non conforme");
+    }
   }
   else {
     modalNameDiv.setAttribute("data-error-visible", "false");
     checkPrenomResult = true ;
   }
+  return checkPrenomResult;
 }
 
 
+
 //contrôler le champ nom
-modalLastName.addEventListener("keyup", checkNom); 
+modalLastName.addEventListener("input", checkNom); 
 const modalLastNameDiv = document.getElementsByClassName("formData")[1]; 
 var checkNomResult = false;
 function checkNom (event) {
-  if (modalLastName.value.length<2){
+  if ((regName.test(modalLastName.value))==false){
     modalLastNameDiv.setAttribute("data-error-visible", "true");
-    modalLastNameDiv.setAttribute("data-error", "2 caractères minimum");
     checkNomResult = false;
+    if (modalLastName.value.length<2){
+      modalLastNameDiv.setAttribute("data-error", "2 caractères minimum");
+    }
+    else {
+      modalLastNameDiv.setAttribute("data-error", "nom non conforme");
+    }
   }
   else {
     modalLastNameDiv.setAttribute("data-error-visible", "false");
-    checkNomResult = true;
+    checkNomResult = true ;
   }
+  return checkNomResult;
 }
 
 
 //contrôler le champ mail
-modalMail.addEventListener("keyup", checkMail); 
+modalMail.addEventListener("input", checkMail); 
 const modalMailDiv = document.getElementsByClassName("formData")[2]; 
 var checkMailResult = false;
 function checkMail (event) {
@@ -86,13 +103,14 @@ function checkMail (event) {
     modalMailDiv.setAttribute("data-error-visible", "false");
     checkMailResult = true;
   }
+  return checkMailResult;
 }
 
 
 
 
 //contrôler le champ date de naissance
-modalBirthdate.addEventListener("keyup", checkBirthdate); 
+modalBirthdate.addEventListener("input", checkBirthdate); 
 const modalBirthdateDiv = document.getElementsByClassName("formData")[3]; 
 var checkBirthDateResult = false;
 function checkBirthdate (event) {
@@ -101,14 +119,128 @@ function checkBirthdate (event) {
   var annee = now.getFullYear();
   var mois = ('0'+(now.getMonth()+1)).slice(-2);
   var jour = ('0'+now.getDate()).slice(-2);
-  console.log(annee, mois, jour);
+  //console.log(annee, mois, jour);
 
   //extraction de la date entrée
   const regDate = /(\d+)-(\d+)-(\d+)/;
   var result = modalBirthdate.value.match(regDate);
-  console.log("bdate", modalBirthdate.value);
-  console.log(result[1]);//annee
-  console.log(result[2]);//mois
-  console.log(result[3]);//jour
+if (result){
+    if (result[1]<annee) {
+      checkBirthDateResult = true;
+    }
+    else if (result[1]==annee && result[2]<mois){
+      checkBirthDateResult = true;
+    }
+    else if (result[1]==annee && result[2]==mois && result[3]<jour) {
+      checkBirthDateResult = true ;
+    }
+  }
+  else {
+    checkBirthDateResult = false;
+    modalBirthdateDiv.setAttribute("data-error-visible", "true");
+    modalBirthdateDiv.setAttribute("data-error", "la date doit être antérieure à la date courante");
+  }
 
+  if (checkBirthDateResult==true) {
+    modalBirthdateDiv.setAttribute("data-error-visible", "false");
+  }
+  return checkBirthDateResult;
 }
+
+
+
+//contrôler le champ nombre de tournoi
+modalTournoi.addEventListener("input", checkTournoi); 
+const modalTournoiDiv = document.getElementsByClassName("formData")[4]; 
+var checkTournoiResult = false;
+function checkTournoi (event) {
+  const regTournoi = /^\d+$/i;
+  if ((regTournoi.test(modalTournoi.value))==false || parseInt(modalTournoi.value)>99){
+    modalTournoiDiv.setAttribute("data-error-visible", "true");
+    modalTournoiDiv.setAttribute("data-error", "format non valide");
+    checkTournoiResult = false;
+  }
+  else {
+    modalTournoiDiv.setAttribute("data-error-visible", "false");
+    checkTournoiResult = true;
+  }
+
+  return checkTournoiResult;
+}
+
+
+//vérification des villes
+const modalCityDiv = document.getElementsByClassName("formData")[5]; 
+var checkCityResult = false;
+for (var i=0 ; i<modalCity.length ; i++ ) {
+  modalCity[i].addEventListener("input", checkCity);
+}
+function checkCity (event) {
+  //console.log("événementn");
+  var checkCityOk = false
+  
+  for (var i=0 ; i<modalCity.length ; i++ ) {
+    if (modalCity[i].checked){
+      checkCityOk = true ;
+      //console.log("coche", modalCity[i].value);
+    }
+  }
+  if (checkCityOk==false) {
+    modalCityDiv.setAttribute("data-error-visible", "true");
+    modalCityDiv.setAttribute("data-error", "Veuillez cocher une ville");
+    checkCityResult = false;
+  }
+  else {
+    modalCityDiv.setAttribute("data-error-visible", "false");
+    checkCityResult = true;
+  }
+  return checkCityResult;
+}
+
+
+
+//vérification des conditions d'utilisation
+modalTerms.addEventListener("input", checkTerms);
+var checkTermsResult = false;
+const modalTermsDiv = document.getElementsByClassName("formData")[6]; 
+function checkTerms(event){
+  if (!modalTerms.checked) {
+    modalTermsDiv.setAttribute("data-error-visible", "true");
+    modalTermsDiv.setAttribute("data-error", "Veuillez accepter les conditions d'utilisation");
+    checkTermsResult = false;
+  }
+  else {
+    modalTermsDiv.setAttribute("data-error-visible", "false");
+    checkTermsResult = true;
+  }
+  return checkTermsResult;
+}
+
+
+
+//validation formulaire
+function validate() {
+  var validation = false ;
+  if (checkPrenomResult && checkNomResult && checkMailResult && checkBirthDateResult && checkTournoiResult && checkCityResult && checkTermsResult) {
+    console.log("yessssssss")
+  }
+  else {
+    validation = false;
+  }
+  return false ;
+}
+
+
+
+
+(function(){
+  checkPrenom();
+  checkNom();
+  checkMail();
+  checkBirthdate();
+  checkTournoi();
+  checkCity();
+  checkTerms();
+  console.log(checkPrenomResult);
+
+})()
