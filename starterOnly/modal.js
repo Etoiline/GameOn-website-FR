@@ -12,7 +12,9 @@ function editNav() {
 const modalbg = document.querySelector(".bground");  //bground représente la div contenant le formulaire
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const modalClose = document.getElementsByClassName("close")[0];
+const modalClose = document.getElementsByClassName("close")[0]; //bouton close du formulaire
+const validationbg = document.querySelector(".bground-validation");  //représente la div contenant le message de validation
+const validationClose = document.getElementsByClassName("close")[1]; //bouton close de la fenêtre de validation
 const modalName = document.getElementById("first");
 const modalLastName = document.getElementById("last");
 const modalMail = document.getElementById("email");
@@ -27,16 +29,45 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 // launch modal form
 function launchModal() {
-  console.log("fonction afficher");
   modalbg.style.display = "block";
 }
 
 // quitter le formulaire
 modalClose.addEventListener("click", quitModal); 
 function quitModal() {
-  //console.log("fonction quitter");
+  modalReset();
   modalbg.style.display = "none";
 }
+
+//quitter la âge de validation
+validationClose.addEventListener("click", quitValidation);
+function quitValidation() {
+  validationbg.style.display = "none";
+}
+
+
+//fonction qui réinitialise le formulaire : messages d'erreur et variables
+function modalReset () {
+  //on réinitialise les variables
+  checkPrenomResult = false ;
+  checkNomResult = false ;
+  checkMailResult = false ;
+  checkBirthDateResult = false;
+  checkTournoiResult = false;
+  checkCityResult = false;
+  checkTermsResult = false ;
+
+  //on réinitialise le formulaire en enlevant les messages d'erreur
+  modalNameDiv.setAttribute("data-error-visible", "false");
+  modalLastNameDiv.setAttribute("data-error-visible", "false");
+  modalMailDiv.setAttribute("data-error-visible", "false");
+  modalBirthdateDiv.setAttribute("data-error-visible", "false");
+  modalTournoiDiv.setAttribute("data-error-visible", "false");
+  modalCityDiv.setAttribute("data-error-visible", "false");
+  modalTermsDiv.setAttribute("data-error-visible", "false");
+  }
+
+
 
 
 const regName = /^[a-zéè]+(?:[\s-]?[a-zéè])+$/i;
@@ -178,13 +209,13 @@ for (var i=0 ; i<modalCity.length ; i++ ) {
 function checkCity (event) {
   //console.log("événementn");
   var checkCityOk = false
-  
   for (var i=0 ; i<modalCity.length ; i++ ) {
     if (modalCity[i].checked){
       checkCityOk = true ;
       //console.log("coche", modalCity[i].value);
     }
   }
+
   if (checkCityOk==false) {
     modalCityDiv.setAttribute("data-error-visible", "true");
     modalCityDiv.setAttribute("data-error", "Veuillez cocher une ville");
@@ -219,20 +250,34 @@ function checkTerms(event){
 
 
 //validation formulaire
-function validate() {
+function validate(event) {
+  event.preventDefault();
   var validation = false ;
   if (checkPrenomResult && checkNomResult && checkMailResult && checkBirthDateResult && checkTournoiResult && checkCityResult && checkTermsResult) {
-    console.log("yessssssss")
+    event.target.reset();
+    modalReset();
+    modalbg.style.display = "none";
+    validationbg.style.display = "block";
   }
   else {
-    validation = false;
+    //on rappelle toutes les fonctions pour que le message d'erreur s'affiche au niveau de la case qui pose problème
+    checkPrenom();
+    checkNom();
+    checkMail();
+    checkBirthdate();
+    checkTournoi();
+    checkCity();
+    checkTerms();
   }
-  return false ;
+
+}
+
+function modalValidate(event){
+  quitValidation();
 }
 
 
-
-
+/*
 (function(){
   checkPrenom();
   checkNom();
@@ -241,6 +286,4 @@ function validate() {
   checkTournoi();
   checkCity();
   checkTerms();
-  console.log(checkPrenomResult);
-
-})()
+})()*/
