@@ -70,7 +70,7 @@ function modalReset () {
 
 
 
-const regName = /^[a-zéè]+(?:[\s-]?[a-zéè])+$/i;
+const regName = /^[a-zéèë]+(?:[\s-]?[a-zéèë])+$/i;
 
 //contrôler le champ prénom
 modalName.addEventListener("input", checkPrenom); 
@@ -150,7 +150,6 @@ function checkBirthdate (event) {
   var annee = now.getFullYear();
   var mois = ('0'+(now.getMonth()+1)).slice(-2);
   var jour = ('0'+now.getDate()).slice(-2);
-  //console.log(annee, mois, jour);
 
   //extraction de la date entrée
   const regDate = /(\d+)-(\d+)-(\d+)/;
@@ -207,15 +206,12 @@ for (var i=0 ; i<modalCity.length ; i++ ) {
   modalCity[i].addEventListener("input", checkCity);
 }
 function checkCity (event) {
-  //console.log("événementn");
   var checkCityOk = false
   for (var i=0 ; i<modalCity.length ; i++ ) {
     if (modalCity[i].checked){
       checkCityOk = true ;
-      //console.log("coche", modalCity[i].value);
     }
   }
-
   if (checkCityOk==false) {
     modalCityDiv.setAttribute("data-error-visible", "true");
     modalCityDiv.setAttribute("data-error", "Veuillez cocher une ville");
