@@ -164,16 +164,23 @@ if (result){
     else if (result[1]==annee && result[2]==mois && result[3]<jour) {
       checkBirthDateResult = true ;
     }
+    else {
+      checkBirthDateResult = false ;     
+    }
+}
  
   else {
     checkBirthDateResult = false;
-    modalBirthdateDiv.setAttribute("data-error-visible", "true");
-    modalBirthdateDiv.setAttribute("data-error", "la date doit être antérieure à la date courante");
   }
 }
 
   if (checkBirthDateResult==true) {
     modalBirthdateDiv.setAttribute("data-error-visible", "false");
+  }
+  else {
+    modalBirthdateDiv.setAttribute("data-error-visible", "true");
+    modalBirthdateDiv.setAttribute("data-error", "la date doit être antérieure à la date courante");
+
   }
   return checkBirthDateResult;
 }
