@@ -164,12 +164,13 @@ if (result){
     else if (result[1]==annee && result[2]==mois && result[3]<jour) {
       checkBirthDateResult = true ;
     }
-  }
+ 
   else {
     checkBirthDateResult = false;
     modalBirthdateDiv.setAttribute("data-error-visible", "true");
     modalBirthdateDiv.setAttribute("data-error", "la date doit être antérieure à la date courante");
   }
+}
 
   if (checkBirthDateResult==true) {
     modalBirthdateDiv.setAttribute("data-error-visible", "false");
@@ -247,9 +248,10 @@ function checkTerms(event){
 
 //validation formulaire
 function validate(event) {
-  event.preventDefault();
+  //event.preventDefault();
   var validation = false ;
-  if (checkPrenomResult && checkNomResult && checkMailResult && checkBirthDateResult && checkTournoiResult && checkCityResult && checkTermsResult) {
+  if (checkPrenomResult && checkNomResult && checkMailResult && checkBirthDateResult && 
+    checkTournoiResult && checkCityResult && checkTermsResult) {
     event.target.reset();
     modalReset();
     modalbg.style.display = "none";
