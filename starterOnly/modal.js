@@ -172,7 +172,7 @@ if (result){
   else {
     checkBirthDateResult = false;
   }
-}
+
 
   if (checkBirthDateResult==true) {
     modalBirthdateDiv.setAttribute("data-error-visible", "false");
