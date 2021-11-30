@@ -259,10 +259,12 @@ function validate(event) {
   var validation = false ;
   if (checkPrenomResult && checkNomResult && checkMailResult && checkBirthDateResult && 
     checkTournoiResult && checkCityResult && checkTermsResult) {
+      
     event.target.reset();
     modalReset();
     modalbg.style.display = "none";
     validationbg.style.display = "block";
+    validation = true;
   }
   else {
     //on rappelle toutes les fonctions pour que le message d'erreur s'affiche au niveau de la case qui pose problème
@@ -273,8 +275,9 @@ function validate(event) {
     checkTournoi();
     checkCity();
     checkTerms();
+    validation = false ;
   }
-
+  return (false);
 }
 
 function modalValidate(event){
