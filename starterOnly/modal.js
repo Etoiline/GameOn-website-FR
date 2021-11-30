@@ -255,16 +255,15 @@ function checkTerms(event){
 
 //validation formulaire
 function validate(event) {
-  //event.preventDefault();
-  var validation = false ;
+  event.preventDefault();
   if (checkPrenomResult && checkNomResult && checkMailResult && checkBirthDateResult && 
     checkTournoiResult && checkCityResult && checkTermsResult) {
+      console.log('ok');
       
     event.target.reset();
     modalReset();
     modalbg.style.display = "none";
     validationbg.style.display = "block";
-    validation = true;
   }
   else {
     //on rappelle toutes les fonctions pour que le message d'erreur s'affiche au niveau de la case qui pose problème
@@ -275,9 +274,7 @@ function validate(event) {
     checkTournoi();
     checkCity();
     checkTerms();
-    validation = false ;
   }
-  return (false);
 }
 
 function modalValidate(event){
